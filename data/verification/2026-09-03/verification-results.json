@@ -1,0 +1,725 @@
+{
+  "aoi": {
+    "east": 74.7,
+    "north": 13.7,
+    "south": 12.7,
+    "west": 74.0
+  },
+  "copernicus": {
+    "chlorophyll_a": {
+      "aoi": {
+        "east": 74.7,
+        "north": 13.7,
+        "south": 12.7,
+        "west": 74.0
+      },
+      "authentication_used": false,
+      "catalogue_http_status": 200,
+      "catalogue_request": "https://stac.marine.copernicus.eu/metadata/OCEANCOLOUR_GLO_BGC_L3_NRT_009_101/cmems_obs-oc_glo_bgc-plankton_nrt_l3-multi-4km_P1D_202411/dataset.stac.json",
+      "classification": "NEAR_REAL_TIME_OBSERVATION",
+      "data_last_modified": null,
+      "data_metadata_http_status": 200,
+      "data_metadata_request": "https://s3.waw3-1.cloudferro.com/mdl-arco-time-043/arco/OCEANCOLOUR_GLO_BGC_L3_NRT_009_101/cmems_obs-oc_glo_bgc-plankton_nrt_l3-multi-4km_P1D_202411/timeChunked.zarr/.zmetadata",
+      "data_request": "https://s3.waw3-1.cloudferro.com/mdl-arco-time-043/arco/OCEANCOLOUR_GLO_BGC_L3_NRT_009_101/cmems_obs-oc_glo_bgc-plankton_nrt_l3-multi-4km_P1D_202411/timeChunked.zarr",
+      "dataset_id": "cmems_obs-oc_glo_bgc-plankton_nrt_l3-multi-4km_P1D_202411",
+      "dataset_latest_time": "2026-09-01T00:00:00.000000000",
+      "latitude": {
+        "axis": "y",
+        "extent": [
+          -89.97917175292969,
+          89.97916412353516
+        ],
+        "reference_system": 4326,
+        "step": 0.041666669021963275,
+        "type": "spatial"
+      },
+      "longitude": {
+        "axis": "x",
+        "extent": [
+          -179.9791717529297,
+          179.9791717529297
+        ],
+        "reference_system": 4326,
+        "step": 0.041666667844178655,
+        "type": "spatial"
+      },
+      "product_id": "OCEANCOLOUR_GLO_BGC_L3_NRT_009_101",
+      "provider": "Copernicus Marine Service",
+      "sample_strategy": "latest AOI time with at least one valid CHL cell",
+      "sample_time": "2026-09-01T00:00:00.000000000",
+      "spatial_coverage": [
+        -179.9791717529297,
+        -89.97917175292969,
+        179.9791717529297,
+        89.97916412353516
+      ],
+      "stac_sha256": "02475a7a21a3134a2e8150fd0b2f33603f2b7c1ac049673f9cf7e0613d6f777b",
+      "temporal_coverage": {
+        "extent": [
+          "2024-09-30T00:00:00Z",
+          "2026-09-01T00:00:00Z"
+        ],
+        "step": "P1D",
+        "type": "temporal"
+      },
+      "title": "cmems_obs-oc_glo_bgc-plankton_nrt_l3-multi-4km_P1D",
+      "variables": {
+        "CHL": {
+          "metadata": {
+            "abbreviation": "CHL",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "algae",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "latitude",
+              "longitude"
+            ],
+            "hasLogScale": true,
+            "id": "CHL",
+            "logScale": false,
+            "missingValue": -999,
+            "name": {
+              "en": "Chlorophyll-a concentration - Mean of the binned pixels"
+            },
+            "offset": null,
+            "scale": null,
+            "standardName": "mass_concentration_of_chlorophyll_a_in_sea_water",
+            "type": "data",
+            "unit": "milligram m-3",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 1.0089593166485429,
+            "valueDiffRelMax": 25,
+            "valueMax": 2.0474085807800293,
+            "valueMin": 0.029489947482943535
+          },
+          "sample": {
+            "max": 8.561383247375488,
+            "min": 2.0344457626342773,
+            "total_cell_count": 408,
+            "units": "milligram m-3",
+            "valid_cell_count": 103
+          }
+        },
+        "CHL_uncertainty": {
+          "metadata": {
+            "abbreviation": "CHL_uncertainty",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "rainbow",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "latitude",
+              "longitude"
+            ],
+            "hasLogScale": true,
+            "id": "CHL_uncertainty",
+            "logScale": false,
+            "missingValue": -32768,
+            "name": {
+              "en": "Chlorophyll-a concentration - Uncertainty estimation"
+            },
+            "offset": null,
+            "scale": 0.009999999776482582,
+            "standardName": null,
+            "type": "data",
+            "unit": "%",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 24.23499870300293,
+            "valueDiffRelMax": 25,
+            "valueMax": 48.46999740600586,
+            "valueMin": 0
+          },
+          "sample": {
+            "max": 57.90999870561063,
+            "min": 14.219999682158232,
+            "total_cell_count": 408,
+            "units": "%",
+            "valid_cell_count": 103
+          }
+        },
+        "flags": {
+          "metadata": {
+            "abbreviation": "flags",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "rainbow",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "latitude",
+              "longitude"
+            ],
+            "flagMasks": 1,
+            "flagMeanings": [
+              "LAND"
+            ],
+            "hasLogScale": false,
+            "id": "flags",
+            "logScale": false,
+            "missingValue": null,
+            "name": {
+              "en": "Flags"
+            },
+            "offset": null,
+            "scale": null,
+            "standardName": "status_flag",
+            "type": "data",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 0.5,
+            "valueDiffRelMax": 25,
+            "valueMax": 1,
+            "valueMin": 0
+          },
+          "sample": {
+            "max": 1.0,
+            "min": 0.0,
+            "total_cell_count": 408,
+            "units": null,
+            "valid_cell_count": 408
+          }
+        }
+      },
+      "verification_status": "VERIFIED",
+      "zmetadata_sha256": "daf970d0f71688d12fa3b0abdd001e7fdab8352be730df7fdbdb08c8fc86ad80"
+    },
+    "sea_surface_temperature": {
+      "aoi": {
+        "east": 74.7,
+        "north": 13.7,
+        "south": 12.7,
+        "west": 74.0
+      },
+      "authentication_used": false,
+      "catalogue_http_status": 200,
+      "catalogue_request": "https://stac.marine.copernicus.eu/metadata/SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001/METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2/dataset.stac.json",
+      "classification": "ANALYSIS",
+      "data_last_modified": null,
+      "data_metadata_http_status": 200,
+      "data_metadata_request": "https://s3.waw3-1.cloudferro.com/mdl-arco-time-045/arco/SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001/METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2/timeChunked.zarr/.zmetadata",
+      "data_request": "https://s3.waw3-1.cloudferro.com/mdl-arco-time-045/arco/SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001/METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2/timeChunked.zarr",
+      "dataset_id": "METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2",
+      "dataset_latest_time": "2026-09-02T00:00:00.000000000",
+      "latitude": {
+        "axis": "y",
+        "extent": [
+          -89.9749984741211,
+          89.9749984741211
+        ],
+        "reference_system": 4326,
+        "step": 0.049999999152053956,
+        "type": "spatial"
+      },
+      "longitude": {
+        "axis": "x",
+        "extent": [
+          -179.97500610351562,
+          179.97500610351562
+        ],
+        "reference_system": 4326,
+        "step": 0.050000001695656514,
+        "type": "spatial"
+      },
+      "product_id": "SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001",
+      "provider": "Copernicus Marine Service",
+      "sample_strategy": "latest AOI time with at least one valid analysed_sst cell",
+      "sample_time": "2026-09-02T00:00:00.000000000",
+      "spatial_coverage": [
+        -179.97500610351562,
+        -89.9749984741211,
+        179.97500610351562,
+        89.9749984741211
+      ],
+      "stac_sha256": "86c26b3c28962c089c69e71e99465fb1776837005a33ddafc117abac6c3f0bd3",
+      "temporal_coverage": {
+        "extent": [
+          "2007-01-01T00:00:00Z",
+          "2026-09-02T00:00:00Z"
+        ],
+        "step": "P1D",
+        "type": "temporal"
+      },
+      "title": "Global SST & Sea Ice Analysis, L4 OSTIA, 0.05 deg daily (METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2)",
+      "variables": {
+        "analysed_sst": {
+          "metadata": {
+            "abbreviation": "analysed_sst",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "thermal",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "latitude",
+              "longitude"
+            ],
+            "hasLogScale": true,
+            "id": "analysed_sst",
+            "logScale": false,
+            "missingValue": -32768,
+            "name": {
+              "en": "Analysed sea surface temperature"
+            },
+            "offset": 273.1499938964844,
+            "scale": 0.009999999776482582,
+            "standardName": "sea_surface_foundation_temperature",
+            "type": "data",
+            "unit": "kelvin",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 15.954986572265625,
+            "valueDiffRelMax": 25,
+            "valueMax": 303.2599792480469,
+            "valueMin": 271.3500061035156
+          },
+          "sample": {
+            "max": 301.80999325588346,
+            "min": 300.15999329276383,
+            "total_cell_count": 280,
+            "units": "kelvin",
+            "valid_cell_count": 279
+          }
+        },
+        "analysis_error": {
+          "metadata": {
+            "abbreviation": "analysis_error",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "rainbow",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "latitude",
+              "longitude"
+            ],
+            "hasLogScale": true,
+            "id": "analysis_error",
+            "logScale": false,
+            "missingValue": -32768,
+            "name": {
+              "en": "Estimated error standard deviation of analysed sst"
+            },
+            "offset": 0,
+            "scale": 0.009999999776482582,
+            "standardName": "sea_surface_foundation_temperature standard_error",
+            "type": "data",
+            "unit": "kelvin",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 0.6200000047683716,
+            "valueDiffRelMax": 25,
+            "valueMax": 1.2400000095367432,
+            "valueMin": 0
+          },
+          "sample": {
+            "max": 0.5199999883770943,
+            "min": 0.2199999950826168,
+            "total_cell_count": 280,
+            "units": "kelvin",
+            "valid_cell_count": 279
+          }
+        },
+        "mask": {
+          "metadata": {
+            "abbreviation": "mask",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "viridis",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "latitude",
+              "longitude"
+            ],
+            "flagMasks": [
+              1,
+              2,
+              4,
+              8,
+              16
+            ],
+            "flagMeanings": [
+              "water",
+              "land",
+              "optional_lake_surface",
+              "sea_ice",
+              "optional_river_surface"
+            ],
+            "hasLogScale": false,
+            "id": "mask",
+            "logScale": false,
+            "missingValue": -128,
+            "name": {
+              "en": "Land sea ice lake bit mask"
+            },
+            "offset": null,
+            "scale": null,
+            "standardName": null,
+            "type": "data",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 4,
+            "valueDiffRelMax": 25,
+            "valueMax": 9,
+            "valueMin": 1
+          },
+          "sample": {
+            "max": 2.0,
+            "min": 1.0,
+            "total_cell_count": 280,
+            "units": null,
+            "valid_cell_count": 280
+          }
+        }
+      },
+      "verification_status": "VERIFIED",
+      "zmetadata_sha256": "9fb29d7937b79be6e61853a9f46f244a01238c45b7daf604e3f6932743853c48"
+    },
+    "surface_currents": {
+      "aoi": {
+        "east": 74.7,
+        "north": 13.7,
+        "south": 12.7,
+        "west": 74.0
+      },
+      "authentication_used": false,
+      "catalogue_http_status": 200,
+      "catalogue_request": "https://stac.marine.copernicus.eu/metadata/GLOBAL_ANALYSISFORECAST_PHY_001_024/cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i_202406/dataset.stac.json",
+      "classification": "FORECAST",
+      "data_last_modified": null,
+      "data_metadata_http_status": 200,
+      "data_metadata_request": "https://s3.waw3-1.cloudferro.com/mdl-arco-time-009/arco/GLOBAL_ANALYSISFORECAST_PHY_001_024/cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i_202406/timeChunked.zarr/.zmetadata",
+      "data_request": "https://s3.waw3-1.cloudferro.com/mdl-arco-time-009/arco/GLOBAL_ANALYSISFORECAST_PHY_001_024/cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i_202406/timeChunked.zarr",
+      "dataset_id": "cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i_202406",
+      "dataset_latest_time": "2026-09-13T00:00:00.000000000",
+      "latitude": {
+        "axis": "y",
+        "extent": [
+          -80,
+          90
+        ],
+        "reference_system": 4326,
+        "step": 0.08333333333333333,
+        "type": "spatial"
+      },
+      "longitude": {
+        "axis": "x",
+        "extent": [
+          -180,
+          179.91668701171875
+        ],
+        "reference_system": 4326,
+        "step": 0.08333333804392655,
+        "type": "spatial"
+      },
+      "product_id": "GLOBAL_ANALYSISFORECAST_PHY_001_024",
+      "provider": "Copernicus Marine Service",
+      "sample_strategy": "latest available forecast time at shallowest model level",
+      "sample_time": "2026-09-13T00:00:00.000000000",
+      "spatial_coverage": [
+        -180,
+        -80,
+        179.91668701171875,
+        90
+      ],
+      "stac_sha256": "5a8d407d38a4360631ff53bbed074ff644975292f47026e9954f568cea088f87",
+      "temporal_coverage": {
+        "extent": [
+          "2022-06-01T00:00:00Z",
+          "2026-09-13T00:00:00Z"
+        ],
+        "step": "PT21600S",
+        "type": "temporal"
+      },
+      "title": "Instantaneous fields for product GLOBAL_ANALYSISFORECAST_PHY_001_024",
+      "variables": {
+        "uo": {
+          "metadata": {
+            "abbreviation": "uo",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "balance",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "elevation",
+              "latitude",
+              "longitude"
+            ],
+            "hasLogScale": false,
+            "id": "uo",
+            "logScale": false,
+            "missingValue": 9.969209968386869e+36,
+            "name": {
+              "en": "Eastward velocity"
+            },
+            "offset": null,
+            "scale": null,
+            "standardName": "eastward_sea_water_velocity",
+            "type": "data",
+            "unit": "m s-1",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 1.104541146755218,
+            "valueDiffRelMax": 25,
+            "valueMax": 1.104541146755218,
+            "valueMin": -1.104541146755218
+          },
+          "sample": {
+            "max": 0.07195555418729782,
+            "min": -0.049694422632455826,
+            "total_cell_count": 108,
+            "units": "m s-1",
+            "valid_cell_count": 108
+          }
+        },
+        "vo": {
+          "metadata": {
+            "abbreviation": "vo",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "balance",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "elevation",
+              "latitude",
+              "longitude"
+            ],
+            "hasLogScale": false,
+            "id": "vo",
+            "logScale": false,
+            "missingValue": 9.969209968386869e+36,
+            "name": {
+              "en": "Northward velocity"
+            },
+            "offset": null,
+            "scale": null,
+            "standardName": "northward_sea_water_velocity",
+            "type": "data",
+            "unit": "m s-1",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 1.104541146755218,
+            "valueDiffRelMax": 25,
+            "valueMax": 1.104541146755218,
+            "valueMin": -1.104541146755218
+          },
+          "sample": {
+            "max": 0.04244694486260414,
+            "min": -0.17701207101345062,
+            "total_cell_count": 108,
+            "units": "m s-1",
+            "valid_cell_count": 108
+          }
+        }
+      },
+      "verification_status": "VERIFIED",
+      "zmetadata_sha256": "908e830882c5b8c93f020f7dcef62e050b0a5a76a5133c1870d0b7d9d18a24c8"
+    },
+    "waves": {
+      "aoi": {
+        "east": 74.7,
+        "north": 13.7,
+        "south": 12.7,
+        "west": 74.0
+      },
+      "authentication_used": false,
+      "catalogue_http_status": 200,
+      "catalogue_request": "https://stac.marine.copernicus.eu/metadata/GLOBAL_ANALYSISFORECAST_WAV_001_027/cmems_mod_glo_wav_anfc_0.083deg_PT3H-i_202411/dataset.stac.json",
+      "classification": "FORECAST",
+      "data_last_modified": null,
+      "data_metadata_http_status": 200,
+      "data_metadata_request": "https://s3.waw3-1.cloudferro.com/mdl-arco-time-015/arco/GLOBAL_ANALYSISFORECAST_WAV_001_027/cmems_mod_glo_wav_anfc_0.083deg_PT3H-i_202411/timeChunked.zarr/.zmetadata",
+      "data_request": "https://s3.waw3-1.cloudferro.com/mdl-arco-time-015/arco/GLOBAL_ANALYSISFORECAST_WAV_001_027/cmems_mod_glo_wav_anfc_0.083deg_PT3H-i_202411/timeChunked.zarr",
+      "dataset_id": "cmems_mod_glo_wav_anfc_0.083deg_PT3H-i_202411",
+      "dataset_latest_time": "2026-09-13T00:00:00.000000000",
+      "latitude": {
+        "axis": "y",
+        "extent": [
+          -80,
+          90
+        ],
+        "reference_system": 4326,
+        "step": 0.08333333333333333,
+        "type": "spatial"
+      },
+      "longitude": {
+        "axis": "x",
+        "extent": [
+          -180,
+          179.91666666666663
+        ],
+        "reference_system": 4326,
+        "step": 0.08333333333333333,
+        "type": "spatial"
+      },
+      "product_id": "GLOBAL_ANALYSISFORECAST_WAV_001_027",
+      "provider": "Copernicus Marine Service",
+      "sample_strategy": "latest available forecast time",
+      "sample_time": "2026-09-13T00:00:00.000000000",
+      "spatial_coverage": [
+        -180,
+        -80,
+        179.91666666666663,
+        90
+      ],
+      "stac_sha256": "6bc8043be89845b8ea5ea5f4d87f96a75fa179fadfba674e67201ee540f2fe72",
+      "temporal_coverage": {
+        "extent": [
+          "2022-11-01T03:00:00Z",
+          "2026-09-13T00:00:00Z"
+        ],
+        "step": "PT10800S",
+        "type": "temporal"
+      },
+      "title": "cmems_mod_glo_wav_anfc_0.083deg_PT3H-i_202411",
+      "variables": {
+        "VHM0": {
+          "metadata": {
+            "abbreviation": "VHM0",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "amp",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "latitude",
+              "longitude"
+            ],
+            "hasLogScale": true,
+            "id": "VHM0",
+            "logScale": false,
+            "missingValue": -32767,
+            "name": {
+              "en": "Spectral significant wave height (Hm0)"
+            },
+            "offset": 0,
+            "scale": 0.009999999776482582,
+            "standardName": "sea_surface_wave_significant_height",
+            "type": "data",
+            "unit": "m",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 3.2299999445676804,
+            "valueDiffRelMax": 25,
+            "valueMax": 6.869999885559082,
+            "valueMin": 0.4099999964237213
+          },
+          "sample": {
+            "max": 1.5899999644607306,
+            "min": 1.0199999772012234,
+            "total_cell_count": 108,
+            "units": "m",
+            "valid_cell_count": 105
+          }
+        },
+        "VMDR": {
+          "metadata": {
+            "abbreviation": "VMDR",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "cyclic",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "latitude",
+              "longitude"
+            ],
+            "hasLogScale": true,
+            "id": "VMDR",
+            "logScale": false,
+            "missingValue": -32767,
+            "name": {
+              "en": "Mean wave direction from (Mdir)"
+            },
+            "offset": 180,
+            "scale": 0.009999999776482582,
+            "standardName": "sea_surface_wave_from_direction",
+            "type": "data",
+            "unit": "degree",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 159.1699981689453,
+            "valueDiffRelMax": 25,
+            "valueMax": 343.75,
+            "valueMin": 25.410003662109375
+          },
+          "sample": {
+            "max": 240.3899986501783,
+            "min": 220.0199991054833,
+            "total_cell_count": 108,
+            "units": "degree",
+            "valid_cell_count": 107
+          }
+        },
+        "VTPK": {
+          "metadata": {
+            "abbreviation": "VTPK",
+            "colormapDiffId": "balance",
+            "colormapDiffInvert": false,
+            "colormapId": "tempo",
+            "colormapInvert": false,
+            "dimensions": [
+              "time",
+              "latitude",
+              "longitude"
+            ],
+            "hasLogScale": true,
+            "id": "VTPK",
+            "logScale": false,
+            "missingValue": -32767,
+            "name": {
+              "en": "Wave period at spectral peak / peak period (Tp)"
+            },
+            "offset": 0,
+            "scale": 0.009999999776482582,
+            "standardName": "sea_surface_wave_period_at_variance_spectral_density_maximum",
+            "type": "data",
+            "unit": "s",
+            "unitConversion": null,
+            "valueClamp": true,
+            "valueColor": false,
+            "valueDiffMax": 5.679999828338623,
+            "valueDiffRelMax": 25,
+            "valueMax": 15.609999656677246,
+            "valueMin": 4.25
+          },
+          "sample": {
+            "max": 16.199999637901783,
+            "min": 15.83999964594841,
+            "total_cell_count": 108,
+            "units": "s",
+            "valid_cell_count": 105
+          }
+        }
+      },
+      "verification_status": "VERIFIED",
+      "zmetadata_sha256": "51283561a93edbf39336349575963eead7c570ff53f008beb7d750154d9309c4"
+    }
+  },
+  "incois": {
+    "catalogue_request": "https://erddap.incois.gov.in/erddap/tabledap/allDatasets.csv?datasetID,title,institution,dataStructure,minLongitude,maxLongitude,minLatitude,maxLatitude,minTime,maxTime",
+    "http_status": 200,
+    "last_modified": null,
+    "row_count_excluding_headers": 17,
+    "sha256": "d357d27aa697606eb3f5792a429e095a7323ddf86a9ad50c0375d635b35b6d47"
+  },
+  "retrieved_at_utc": "2026-09-03T12:54:02.615342+00:00",
+  "schema_version": 1
+}

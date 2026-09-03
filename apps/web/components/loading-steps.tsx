@@ -1,0 +1,3 @@
+"use client";
+const steps = [["fetching", "Fetching marine evidence"], ["analysing", "Analysing ocean conditions"], ["generating", "Generating candidate zones"], ["jury", "Running five-member jury"], ["preparing", "Preparing recommendation"]] as const;
+export function LoadingSteps({ stage }: { stage: string }) { const index = steps.findIndex(([key]) => key === stage); return <div className="loading-steps" role="status" aria-live="polite">{steps.map(([key, label], i) => <div key={key} className={i < index || stage === "done" ? "complete" : i === index ? "current" : "pending"}><span>{i < index || stage === "done" ? "✓" : i === index ? "●" : "○"}</span>{label}</div>)}</div>; }

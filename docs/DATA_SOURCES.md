@@ -1,78 +1,78 @@
-# BLUEJURY AI V2 — Data Sources Register
+# BLUEJURY AI V2 — Verified Data Source Register
 
-Status: discovery register only. No dataset below is approved or integrated yet. Exact dataset identifiers are intentionally absent until verified through the current official catalogue and sampled.
+Verification: 2026-09-03T12:54:02.615342Z. Test AOI: 74.0–74.7°E, 12.7–13.7°N, offshore of Mangaluru–Udupi. Machine record: `data/verification/2026-09-03/verification-results.json`.
 
-## 1. Rule for this register
+`VERIFIED` means official metadata and a bounded real subset were retrieved and inspected. It does not approve scientific thresholds or juror use.
 
-A row becomes `VERIFIED` only after catalogue discovery, metadata inspection, geographic and temporal coverage checks, exact variable/unit verification, successful sample retrieval, licence review, and provenance capture. Provider names are leads, not evidence that a usable product exists.
+## Selected sources
 
-## 2. Candidate source register
+### Chlorophyll-a — VERIFIED
 
-| Need | Preferred provider lead | Intended use | Status | Required verification |
-|---|---|---|---|---|
-| Potential Fishing Zone advisory | INCOIS official services | Catch evidence or advisory comparison | TODO — unverified | Discover current machine-accessible service; verify terms, spatial encoding, validity time, coverage, and whether operational reuse is permitted |
-| Chlorophyll-a | INCOIS ERDDAP/official catalogue; Copernicus Marine catalogue | Catch features and map layer | TODO — unverified | Discover product; inspect sensor/model, variable name, units, quality flags, depth, resolution, latency, India coverage; retrieve sample |
-| Sea-surface temperature | INCOIS ERDDAP/official catalogue; Copernicus Marine catalogue | Catch/safety context and map layer | TODO — unverified | Discover product; verify foundation/skin/bulk meaning, variable, units, quality flags, resolution, latency, coverage; retrieve sample |
-| Significant wave height/direction/period | INCOIS official catalogue; Copernicus Marine catalogue | Safety evidence and risk layer | TODO — unverified | Discover forecast/observation product; verify variables, units, model cycle/valid time, horizon, grid, coastal coverage; retrieve sample |
-| Surface wind speed/direction | INCOIS official catalogue; Copernicus Marine catalogue | Safety evidence and risk layer | TODO — unverified | Discover product; verify reference height, vector components, units, forecast validity, grid; retrieve sample |
-| Surface currents | INCOIS official catalogue; Copernicus Marine catalogue | Route/safety/fuel context | TODO — unverified | Discover product; verify depth, vector convention, units, valid time, coastal resolution; retrieve sample |
-| Marine warnings | INCOIS official warning service | Trip-wide and spatial safety constraints | TODO — unverified | Identify authoritative structured feed, warning geometry, categories/severity, issued/expiry time, usage terms; retrieve sample |
-| Marine Protected Areas | Protected Planet official data/service | Ecology intersection | TODO — unverified | Confirm downloadable/API product, geometry completeness for launch geography, WDPA status/category fields, update/version, licence and redistribution |
-| OECMs | Protected Planet official data/service | Ecology intersection | TODO — unverified | Confirm OECM availability, geometry/status fields, update/version, licence and redistribution |
-| EEZ/reference maritime boundaries | Marine Regions official dataset/service | Border intersection/reference display | TODO — unverified | Identify current EEZ product/version, disputed/overlapping claims representation, geometry precision, licence, attribution; retrieve sample |
-| Coastline/land mask | TODO: authoritative open source | Route navigability and map context | TODO — source not selected | Assess resolution, topology, licence, update cadence, small-island coverage, and suitability for navigation constraints |
-| Bathymetry/navigation constraints | TODO: authoritative open source | Candidate feasibility/routing if needed | TODO — source not selected | Define need; verify resolution, vertical datum, hazards, licence; do not imply nautical-chart authority |
+- Provider: Copernicus Marine Service; ACRI-ST.
+- Product: `OCEANCOLOUR_GLO_BGC_L3_NRT_009_101`, *Global Ocean Colour (Copernicus-GlobColour), Bio-Geo-Chemical, L3 (daily) from Satellite Observations (Near Real Time)*.
+- Dataset: `cmems_obs-oc_glo_bgc-plankton_nrt_l3-multi-4km_P1D_202411`, *cmems_obs-oc_glo_bgc-plankton_nrt_l3-multi-4km_P1D*.
+- Type: `NEAR_REAL_TIME_OBSERVATION`; Level-3 daily multi-sensor satellite observation, not instantaneous.
+- Variables present: `CHL`, `CHL_uncertainty`, `DIATO`, `DIATO_uncertainty`, `DINO`, `DINO_uncertainty`, `GREEN`, `GREEN_uncertainty`, `HAPTO`, `HAPTO_uncertainty`, `MICRO`, `MICRO_uncertainty`, `NANO`, `NANO_uncertainty`, `PICO`, `PICO_uncertainty`, `PROCHLO`, `PROCHLO_uncertainty`, `PROKAR`, `PROKAR_uncertainty`, `flags`.
+- Selected: `CHL` (`milligram m-3`, CF `mass_concentration_of_chlorophyll_a_in_sea_water`), `CHL_uncertainty` (`%`), `flags` (unitless).
+- Grid: longitude −179.9791717529..179.9791717529°, ascending; latitude −89.9791717529..89.9791641235°, ascending; 0.04166667° (nominal 4 km); dataset STAC says EPSG:4326. The product page calls Plate Carrée EPSG:32662; this discrepancy remains a TODO.
+- Coverage/time: global including Karnataka; 2024-09-30..2026-09-01, daily. Latest verified: **2026-09-01T00:00:00Z**.
+- Fill: `CHL=-999`; `CHL_uncertainty=-32768` with scale 0.01; `flags` has no missing sentinel in STAC. Decoding masks fill values.
+- Retrieval/auth: official STAC + public HTTP ARCO Zarr, no credentials used. Toolbox workflows may require a free account.
+- Terms: [Copernicus Marine licence](https://marine.copernicus.eu/user-corner/service-commitments-and-licence); metadata requires CMEMS/ACRI-ST credit.
 
-## 3. Important limitations
+### Sea-surface temperature — VERIFIED
 
-- A reference EEZ dataset is not a legal determination, especially in disputed or overlapping areas. The UI and Border Juror must name the source/version and use cautious wording.
-- Protected Planet records do not by themselves encode every fishing regulation. Designation, status, governance, and applicable regulations may require separate authoritative sources.
-- Satellite chlorophyll/SST can have cloud, coastal, quality, spatial-resolution, and latency limitations. These must be obtained from actual product metadata.
-- Forecast model values and observations are different evidence types; their times and confidence rules cannot be merged casually.
-- PFZ advisory access, format, scope, and reuse are unresolved. No endpoint or dataset ID may be guessed.
+- Provider: Copernicus Marine Service; UK Met Office.
+- Product: `SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001`, *Global Ocean OSTIA Sea Surface Temperature and Sea Ice Analysis*.
+- Dataset: `METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2`, *Global SST & Sea Ice Analysis, L4 OSTIA, 0.05 deg daily*.
+- Type: `ANALYSIS`; Level-4 foundation-SST analysis combining satellite and in-situ inputs, not a raw satellite pixel product.
+- Variables: `analysed_sst`, `analysis_error`, `mask`, `sea_ice_fraction`. Selected first three; SST/error units `kelvin`; SST standard name `sea_surface_foundation_temperature`.
+- Grid: longitude −179.9750061035..179.9750061035°, ascending; latitude −89.9749984741..89.9749984741°, ascending; EPSG:4326; 0.05° (~6 km).
+- Coverage/time: global including Karnataka; dataset coordinate coverage 2007-01-01..2026-09-02, daily. Latest verified: **2026-09-02T00:00:00Z**.
+- Fill: SST/error `-32768` with scale 0.01 (SST offset 273.15); mask `-128`.
+- Retrieval/auth: official STAC + public HTTP ARCO Zarr, no credentials used.
+- Terms: [licence](https://marine.copernicus.eu/user-corner/service-commitments-and-licence); [DOI 10.48670/moi-00165](https://doi.org/10.48670/moi-00165).
 
-## 4. Per-dataset verification record template
+### Waves — VERIFIED
 
-Create one subsection per admitted dataset:
+- Provider: Copernicus Marine Service; Météo-France/Global Monitoring and Forecasting Centre.
+- Product: `GLOBAL_ANALYSISFORECAST_WAV_001_027`, *Global Ocean Waves Analysis and Forecast*.
+- Dataset: `cmems_mod_glo_wav_anfc_0.083deg_PT3H-i_202411`, 3-hourly instantaneous fields.
+- Type: `FORECAST`; future valid times are not observations.
+- Variables present: `VCMX`, `VHM0`, `VHM0_SW1`, `VHM0_SW2`, `VHM0_WW`, `VMDR`, `VMDR_SW1`, `VMDR_SW2`, `VMDR_WW`, `VMXL`, `VPED`, `VSDX`, `VSDY`, `VTM01_SW1`, `VTM01_SW2`, `VTM01_WW`, `VTM02`, `VTM10`, `VTPK`.
+- Selected: `VHM0` significant wave height (`m`), `VMDR` mean wave direction **from** (`degree`), `VTPK` peak period (`s`).
+- Grid: longitude −180..179.9166667°, ascending; latitude −80..90°, ascending; EPSG:4326; 0.0833333° (~9 km).
+- Coverage/time: global including Karnataka; 2022-11-01T03:00Z..2026-09-13T00:00Z, 3-hourly; product updated 00:00/12:00 UTC with ~10-day horizon. Latest verified **2026-09-13T00:00:00Z forecast-valid**, not current conditions.
+- Fill: selected variables raw sentinel `-32767`, with scale/offset metadata.
+- Retrieval/auth: official STAC + public HTTP ARCO Zarr, no credentials used.
+- Terms: [licence](https://marine.copernicus.eu/user-corner/service-commitments-and-licence); [DOI 10.48670/moi-00017](https://doi.org/10.48670/moi-00017).
 
-```text
-Dataset status: DISCOVERED | SAMPLED | VERIFIED | SUSPENDED | RETIRED
-Provider / authority:
-Catalogue URL:
-Metadata URL:
-Data endpoint URL:
-Dataset title:
-Exact identifier and version:
-Discovery and verification timestamps (UTC):
-Variables and dimensions:
-Units / scale / offset / nodata / quality flags:
-Observation or forecast semantics:
-Temporal coverage / update cadence / latency:
-Geographic coverage / CRS / grid / resolution / depth:
-Sample request and response reference:
-Raw checksum:
-Validation result and validator version:
-Licence / terms URL / attribution:
-Caching and redistribution constraints:
-Known limitations:
-Approved BLUEJURY uses:
-Reviewer and review date:
-```
+### Ocean surface currents — VERIFIED
 
-## 5. Evidence-source selection rules
+- Provider: Copernicus Marine Service; Mercator Ocean International.
+- Product: `GLOBAL_ANALYSISFORECAST_PHY_001_024`, *Global Ocean Physics Analysis and Forecast*.
+- Dataset: `cmems_mod_glo_phy-cur_anfc_0.083deg_PT6H-i_202406`, *Instantaneous fields for product GLOBAL_ANALYSISFORECAST_PHY_001_024*.
+- Type: `FORECAST`.
+- Variables: `uo` eastward and `vo` northward velocity, both `m s-1`.
+- Grid: longitude −180..179.9166870°, ascending; latitude −80..90°, ascending; EPSG:4326; 0.0833333°; 50 depths, shallowest −0.494025 m (used for sample).
+- Coverage/time: global including Karnataka; 2022-06-01..2026-09-13, 6-hourly; operational product updated daily. Latest verified **2026-09-13T00:00:00Z forecast-valid**.
+- Fill: `9.969209968386869e+36`, decoded to missing.
+- Retrieval/auth: official STAC + public HTTP ARCO Zarr, no credentials used.
+- Terms: [licence](https://marine.copernicus.eu/user-corner/service-commitments-and-licence); [DOI 10.48670/moi-00016](https://doi.org/10.48670/moi-00016).
+- Scope: technically verified, but optional until a reviewed Safety/fuel use exists.
 
-When more than one verified product can supply a variable, selection must be deterministic and configured by geography, time validity, quality, resolution appropriate to the use, provider authority, and licence—not by whichever endpoint responds first. Fallbacks must be verified separately and surfaced in provenance.
+## INCOIS result
 
-TODO: Define source precedence only after products are sampled and quantitatively compared over the launch geography.
+The official INCOIS ERDDAP `allDatasets` request returned HTTP 200 and 17 rows without authentication. Relevant products are historical: `IRS_chlorophyll_datasets` (2003–2006), `incois_oceansat2_datasets` (2011–2020), `NOAA_AVHRR_AMSR_datasets` SST (2002–2011), `incois_tmi_3day_datasets` SST (1997–2014), and `ascat_daily_datasets` wind (ends 2023). No current wave forecast or PFZ dataset appears in this catalogue. They are rejected for operational use.
 
-## 6. Discovery work queue
+## Official PFZ
 
-1. TODO: Confirm launch coastline/operating envelope; source coverage cannot be verified without it.
-2. TODO: Inspect the current INCOIS catalogue/ERDDAP and document exact discoverable products.
-3. TODO: Inspect the current Copernicus Marine catalogue and authentication/licensing requirements.
-4. TODO: Verify Protected Planet MPA/OECM access, licence, versioning, and geometry completeness.
-5. TODO: Verify Marine Regions EEZ/reference-boundary product, disputed-area semantics, licence, and attribution.
-6. TODO: Retrieve minimal real samples for each approved variable and record manifests/checksums.
-7. TODO: Establish product-specific freshness windows with domain justification.
-8. TODO: Decide authoritative marine warning, coastline, and routing-constraint sources.
+INCOIS official material confirms PFZ advisories and mentions REST/third-party dissemination. No official public endpoint documentation, catalogue entry, schema, access procedure, licence, or retrievable Karnataka sample was found without scraping.
 
+**OFFICIAL_PFZ_PROGRAMMATIC_ACCESS_NOT_VERIFIED**
+
+No PFZ endpoint, polygon, coordinate, or fixture was created.
+
+## Phase 2B eligibility
+
+Only the four Copernicus datasets above are technically eligible for evidence ingestion/validation. This does not approve zones, scoring, veto thresholds, or juror logic.
