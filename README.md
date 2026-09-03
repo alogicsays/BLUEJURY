@@ -1,6 +1,4 @@
-# BLUEJURY AI V2
-
-Explainable multi-agent marine decision intelligence for fishers. Phase 1 contains production-oriented scaffolding and contracts only; no marine providers, environmental values, candidates, or decisions are fabricated.
+# BLUEJURY
 
 ## Prerequisites
 
