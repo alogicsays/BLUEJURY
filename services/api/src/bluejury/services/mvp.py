@@ -5,12 +5,20 @@ import math
 import time
 from datetime import UTC, datetime
 from pathlib import Path
+from threading import Lock
 from typing import Any
 from uuid import uuid4
 
 import numpy as np
 import xarray as xr
 
+from bluejury.adapters.marine_regions import load_india_eez
+from bluejury.adapters.protected_planet import load_protected_areas
+from bluejury.adapters.protected_planet_local import load_india_protected_areas
+from bluejury.adapters.wii_biodiversity_context import load_mulki_pavanje_context
+from bluejury.config.settings import get_settings
+from bluejury.jurors.border import evaluate_border
+from bluejury.jurors.ecology import evaluate_ecology
 from bluejury.schemas.mvp import AnalyzeRequest, AnalyzeResponse
 
 ROOT = Path(__file__).resolve().parents[5]
@@ -33,6 +41,12 @@ SOURCES = {
         "https://s3.waw3-1.cloudferro.com/mdl-arco-time-015/arco/GLOBAL_ANALYSISFORECAST_WAV_001_027/cmems_mod_glo_wav_anfc_0.083deg_PT3H-i_202411/timeChunked.zarr",
     ),
 }
+MARINE_MEMORY_TTL_SECONDS = 300.0
+MARINE_CACHED_FALLBACK_TTL_SECONDS = 60.0
+_marine_memory: dict[tuple[float, float, str], tuple[dict[str, Any], bool, float]] = {}
+_marine_memory_lock = Lock()
+_reference_memory: dict[tuple[object, object, object, object, str | None], tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None]] = {}
+_reference_memory_lock = Lock()
 
 
 def haversine(a: tuple[float, float], b: tuple[float, float]) -> float:
@@ -85,6 +99,15 @@ def evidence(
 
 
 def load_real(request: AnalyzeRequest) -> tuple[dict[str, Any], bool]:
+    key = (request.start.latitude, request.start.longitude, request.departure_at.isoformat())
+    now = time.monotonic()
+    with _marine_memory_lock:
+        remembered = _marine_memory.get(key)
+    if remembered is not None:
+        payload, cached, loaded_at = remembered
+        ttl = MARINE_CACHED_FALLBACK_TTL_SECONDS if cached else MARINE_MEMORY_TTL_SECONDS
+        if now - loaded_at < ttl:
+            return payload, cached
     CACHE.mkdir(parents=True, exist_ok=True)
     cache_file = CACHE / "latest.json"
     last_error: Exception | None = None
@@ -141,13 +164,18 @@ def load_real(request: AnalyzeRequest) -> tuple[dict[str, Any], bool]:
                 },
             }
             cache_file.write_text(json.dumps(payload))
+            with _marine_memory_lock:
+                _marine_memory[key] = (payload, False, time.monotonic())
             return payload, False
         except Exception as exc:
             last_error = exc
             if attempt == 0:
                 time.sleep(0.5)
     if cache_file.exists():
-        return json.loads(cache_file.read_text()), True
+        payload = json.loads(cache_file.read_text())
+        with _marine_memory_lock:
+            _marine_memory[key] = (payload, True, time.monotonic())
+        return payload, True
     raise RuntimeError("Marine evidence unavailable and no validated cache exists") from last_error
 
 
@@ -171,7 +199,13 @@ def nearest(grid: dict[str, Any], key: str, lat: float, lon: float) -> float:
 
 
 def scorecards(
-    candidate: dict[str, Any], request: AnalyzeRequest, real: dict[str, Any], cached: bool
+    candidate: dict[str, Any],
+    request: AnalyzeRequest,
+    real: dict[str, Any],
+    cached: bool,
+    ecology_reference: dict[str, Any] | None,
+    border_reference: dict[str, Any] | None,
+    ecology_context: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     distance = candidate["route"]["distance_km"]
     base = 2 * distance * request.boat.burn_rate_l_per_km
@@ -228,31 +262,79 @@ def scorecards(
                 "margin_l": margin,
             },
         },
-        {
-            **common,
-            "agent": "ecology",
-            "score": 50,
-            "veto": False,
-            "reason_codes": ["DATA_UNAVAILABLE"],
-            "reason": "Protected-area prohibition data is not integrated; no clearance is asserted.",
-            "evidence_references": [],
-            "confidence": 0.0,
-        },
-        {
-            **common,
-            "agent": "border",
-            "score": 50,
-            "veto": False,
-            "reason_codes": ["DATA_UNAVAILABLE"],
-            "reason": "Maritime reference geometry is not integrated; no clearance is asserted.",
-            "evidence_references": [],
-            "confidence": 0.0,
-        },
+        evaluate_ecology(
+            candidate["zone_id"], candidate["geometry"], candidate["route"]["geometry"],
+            ecology_reference, POLICY["ecology_near_distance_km"],
+            footprint_role=candidate.get("geometry_role"),
+            destination_lonlat=(candidate["centroid"]["longitude"], candidate["centroid"]["latitude"]),
+            supplementary_context=ecology_context,
+        ),
+        evaluate_border(
+            candidate["zone_id"], candidate["geometry"], candidate["route"]["geometry"],
+            border_reference, POLICY["border_near_distance_km"],
+            footprint_role=candidate.get("geometry_role"),
+            destination_lonlat=(candidate["centroid"]["longitude"], candidate["centroid"]["latitude"]),
+        ),
     ]
+
+
+def load_references() -> tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None]:
+    """Reuse validated static reference data for the lifetime of this backend process."""
+    settings = get_settings()
+    key = (
+        load_india_protected_areas, load_protected_areas, load_mulki_pavanje_context,
+        load_india_eez, settings.protected_planet_api_token,
+    )
+    with _reference_memory_lock:
+        remembered = _reference_memory.get(key)
+        if remembered is not None:
+            return remembered
+        ecology_reference = load_india_protected_areas(ROOT / "data" / "reference" / "protected-planet")
+        if ecology_reference is None:
+            ecology_reference = load_protected_areas(
+                settings.protected_planet_api_token,
+                ROOT / "data" / "cache" / "protected-planet" / "india-marine-v4.json",
+            )
+        references = (
+            ecology_reference,
+            load_mulki_pavanje_context(ROOT / "data" / "reference" / "wii-icmba"),
+            load_india_eez(ROOT / "data" / "reference" / "marine-regions"),
+        )
+        _reference_memory[key] = references
+        return references
+
+
+def scorecard_is_eligible(card: dict[str, Any]) -> bool:
+    """Exclude only unsupported Ecology assessment scores; hard vetoes remain separate."""
+    if card.get("agent") != "ecology":
+        return True
+    return bool(card.get("confidence", 0) > 0 and "DATA_UNAVAILABLE" not in card.get("reason_codes", []))
+
+
+def negotiate_score(cards: list[dict[str, Any]], weights: dict[str, float]) -> tuple[float, list[str]]:
+    eligible = [card for card in cards if scorecard_is_eligible(card)]
+    eligible_weight = sum(weights.get(card["agent"], 0) for card in eligible)
+    excluded = [card["agent"] for card in cards if not scorecard_is_eligible(card)]
+    if eligible_weight <= 0:
+        return 0.0, excluded
+    score = float(sum(weights.get(card["agent"], 0) * card["score"] for card in eligible) / eligible_weight)
+    return score, excluded
+
+
+def negotiation_confidence(cards: list[dict[str, Any]], weights: dict[str, float]) -> float:
+    eligible = [card for card in cards if scorecard_is_eligible(card)]
+    eligible_weight = sum(weights.get(card["agent"], 0) for card in eligible)
+    if eligible_weight <= 0:
+        return 0.0
+    return float(
+        sum(weights.get(card["agent"], 0) * card["confidence"] for card in eligible)
+        / eligible_weight
+    )
 
 
 def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
     real, cached = load_real(request)
+    ecology_reference, ecology_context, border_reference = load_references()
     chl = np.asarray(real["chl"]["value"], dtype=float)
     valid = chl != -999
     values = chl[valid]
@@ -299,6 +381,7 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
             "user_selected": bool(request.selected_area and index == 0),
             "centroid": {"latitude": lat, "longitude": lon},
             "geometry": circle(lon, lat, POLICY["candidate_radius_km"]),
+            "geometry_role": "DISCOVERY_FOOTPRINT",
             "chl": None if chl_value == -999 else chl_value,
             "chl_percentile": percentile,
             "sst_kelvin": None if sst == -999 else sst,
@@ -311,15 +394,22 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
             ],
             "route": route(start, (lat, lon)),
         }
-        item["juror_scorecards"] = scorecards(item, request, real, cached)
+        item["juror_scorecards"] = scorecards(
+            item, request, real, cached, ecology_reference, border_reference, ecology_context
+        )
         item["vetoes"] = [s for s in item["juror_scorecards"] if s["veto"]]
         candidates.append(item)
     feasible = [c for c in candidates if not c["vetoes"]]
     weights = request.priorities
     for c in feasible:
-        c["negotiated_score"] = sum(
-            weights.get(s["agent"], 0) * s["score"] for s in c["juror_scorecards"]
-        )
+        c["negotiated_score"], excluded = negotiate_score(c["juror_scorecards"], weights)
+        c["negotiation_details"] = {
+            "excluded_agents": excluded,
+            "eligible_agents": [
+                card["agent"] for card in c["juror_scorecards"] if scorecard_is_eligible(card)
+            ],
+            "weights_renormalized": bool(excluded),
+        }
     feasible.sort(
         key=lambda c: (
             c["negotiated_score"],
@@ -330,15 +420,19 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
     )
     winner = feasible[0] if feasible else None
     verdict = "NO_GO" if not winner else "CAUTIOUS_GO"
-    why = (
-        []
-        if not winner
-        else [
+    why: list[str] = []
+    if winner:
+        why = [
             "Strong relative chlorophyll signal in the analysed AOI",
             "Route survives configured MVP wave and fuel feasibility checks",
-            "Ecology and border evidence remain unavailable, so BLUEJURY does not issue an unqualified GO",
         ]
-    )
+        ecology = next(card for card in winner["juror_scorecards"] if card["agent"] == "ecology")
+        border = next(card for card in winner["juror_scorecards"] if card["agent"] == "border")
+        if scorecard_is_eligible(ecology):
+            why.append(ecology["reason"])
+        else:
+            why.append("Ecology was excluded from weighted negotiation because coverage was insufficient; no ecological clearance is asserted.")
+        why.append(border["reason"])
     ev = [
         evidence("chl", "CHL", real["chl_time"], "milligram m-3", cached, real["retrieved_at"]),
         evidence("sst", "analysed_sst", real["sst_time"], "kelvin", cached, real["retrieved_at"]),
@@ -360,7 +454,9 @@ def analyze(request: AnalyzeRequest) -> AnalyzeResponse:
             {"zone_id": c["zone_id"], "vetoes": c["vetoes"]} for c in candidates if c["vetoes"]
         ],
         why_winner_won=why,
-        overall_confidence=0.58 if winner else 0.7,
+        overall_confidence=negotiation_confidence(winner["juror_scorecards"], weights)
+        if winner
+        else 0.7,
         freshness_summary="CACHED real provider response"
         if cached
         else "Three verified Copernicus sources",

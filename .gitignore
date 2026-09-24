@@ -9,7 +9,9 @@ __pycache__/
 *.py[cod]
 node_modules/
 .next/
+out/
 coverage/
 dist/
 *.log
 *.tsbuildinfo
+data/reference/protected-planet/

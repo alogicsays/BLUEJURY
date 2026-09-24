@@ -3,6 +3,8 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
+FootprintRole = Literal["DISCOVERY_FOOTPRINT", "FISHING_ACTIVITY_AREA"]
+
 
 class StartPoint(BaseModel):
     latitude: float = Field(ge=-90, le=90)

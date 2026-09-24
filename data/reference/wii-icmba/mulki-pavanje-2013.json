@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "record_id": "wii-icmba-2013-mulki-pavanje",
+  "provider": "Wildlife Institute of India",
+  "publication": "Important Coastal and Marine Biodiversity Areas of India",
+  "publication_year": 2013,
+  "publication_context": "Coastal and Marine Protected Areas in India: Challenges and Way Forward, ENVIS Bulletin: Wildlife & Protected Areas, Volume 15",
+  "official_source_url": "https://digitalrepository.wii.gov.in/bitstreams/42276ced-730e-4573-a0aa-655a52ba7096/download",
+  "source_pages": {
+    "coordinate_table": 143,
+    "site_narrative": 158
+  },
+  "site_name": "Mulki-Pavanje",
+  "district": "Dakshin Kannada",
+  "state": "Karnataka",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      74.7877833333,
+      13.09725
+    ]
+  },
+  "geometry_semantics": "POINT_CONTEXT_ONLY",
+  "coordinate_as_published": "13°05.835′ N, 74°47.267′ E",
+  "habitat": "Estuarine backwater and mangrove islets",
+  "reported_area_km2": 3.5,
+  "reported_area_use": "SOURCE_METADATA_ONLY_DO_NOT_DERIVE_GEOMETRY",
+  "conservation_priority_index": 0.53,
+  "suggested_category": "Community or Conservation Reserve",
+  "designation_status": "NOTIFICATION_NOT_VERIFIED",
+  "context_status": "PROPOSED_CONSERVATION_CANDIDATE",
+  "fishing_restriction_status": "NONE_VERIFIED",
+  "legal_effect": "NONE_ASSERTED",
+  "classification": "HISTORICAL_BIODIVERSITY_CONTEXT",
+  "source_limitations": [
+    "The report supplies a point and reported area, not a protected-area boundary; no polygon may be inferred.",
+    "The narrative describes the site as about 44 km north of Mangalore, while the published coordinate is approximately 20 km from New Mangalore Port.",
+    "No notification or activity-specific fishing restriction was verified from this report."
+  ],
+  "evidence_ref": "wii:icmba:2013:mulki-pavanje",
+  "licence_note": "Citation-controlled contextual reference; consult the official repository for reuse terms."
+}

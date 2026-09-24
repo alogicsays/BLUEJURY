@@ -5,9 +5,10 @@ from bluejury.api.routes import router
 from bluejury.config.settings import get_settings
 
 app = FastAPI(title="BLUEJURY AI API", version="0.1.0")
+settings = get_settings()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[get_settings().web_origin],
+    allow_origins=[settings.web_origin, settings.capacitor_origin],
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type", "Authorization"],
