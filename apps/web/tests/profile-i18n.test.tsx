@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ExperienceProvider, LANGUAGE_KEY, PROFILE_KEY, useExperience } from "@/components/experience-provider";
 import { WelcomeScreen } from "@/components/welcome-screen";
 import { Jury } from "@/components/decision-panel";
@@ -7,6 +7,9 @@ import { dictionaries, locales, type Locale } from "@/lib/i18n";
 import { ACCOUNTS_KEY, registerLocalAccount, SESSION_KEY, signInLocalAccount } from "@/lib/local-auth";
 import { persistOfflineTrip, removeOfflineTrip, retrieveOfflineTrip } from "@/lib/offline-trip-store";
 import { decision, plan } from "./offline-trip-store.test";
+
+const replaceRoute = vi.hoisted(() => vi.fn());
+vi.mock("next/navigation", () => ({ useRouter: () => ({ replace: replaceRoute }) }));
 
 function ProfileProbe() {
   const { ready, profile, locale, setLocale, saveProfile, signOut, t } = useExperience();
@@ -38,12 +41,32 @@ async function signUpThroughUi(name = "Amulya", email = "amulya@example.test", p
 }
 
 describe("device-local authentication and shared language experience", () => {
-  beforeEach(async () => { localStorage.clear(); await removeOfflineTrip(); });
+  beforeEach(async () => { localStorage.clear(); replaceRoute.mockClear(); window.history.replaceState({}, "", "/"); await removeOfflineTrip(); });
+
+  it("opens Home after website sign-in from Marine Map, without redirecting on session restoration", async () => {
+    await registerLocalAccount("Fisher", "fisher@example.test", "Fishing123!");
+    localStorage.removeItem(SESSION_KEY);
+    window.history.replaceState({}, "", "/map");
+    const view = render(<ExperienceProvider><WelcomeWhenReady /><ProfileProbe /></ExperienceProvider>);
+    await waitFor(() => expect(screen.getByLabelText("EMAIL ADDRESS")).toBeInTheDocument());
+    expect(replaceRoute).not.toHaveBeenCalled();
+    fireEvent.change(screen.getByLabelText("EMAIL ADDRESS"), { target: { value: "fisher@example.test" } });
+    fireEvent.change(screen.getByLabelText("PASSWORD"), { target: { value: "Fishing123!" } });
+    fireEvent.click(screen.getByRole("button", { name: /^sign in/i }));
+    await waitFor(() => expect(replaceRoute).toHaveBeenCalledExactlyOnceWith("/"));
+    view.unmount();
+    replaceRoute.mockClear();
+    render(<ExperienceProvider><WelcomeWhenReady /><ProfileProbe /></ExperienceProvider>);
+    await waitFor(() => expect(screen.getByTestId("profile")).toHaveTextContent("Fisher"));
+    expect(replaceRoute).not.toHaveBeenCalled();
+  });
 
   it("registers an account, stores no plaintext password, and restores its session", async () => {
+    window.history.replaceState({}, "", "/map");
     const view = render(<ExperienceProvider><WelcomeWhenReady /><ProfileProbe /></ExperienceProvider>);
     await waitFor(() => expect(screen.getByTestId("profile")).toHaveTextContent("NO_PROFILE"));
     await signUpThroughUi();
+    expect(replaceRoute).toHaveBeenCalledExactlyOnceWith("/");
     const stored = localStorage.getItem(ACCOUNTS_KEY) ?? "";
     expect(stored).not.toContain("Bluejury42!");
     expect(JSON.parse(stored)[0]).toEqual(expect.objectContaining({ email: "amulya@example.test", salt: expect.any(String), verifier: expect.any(String) }));

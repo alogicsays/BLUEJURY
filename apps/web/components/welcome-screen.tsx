@@ -1,5 +1,7 @@
 "use client";
 
+import { Capacitor } from "@capacitor/core";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { BrandMark } from "./brand-mark";
 import { useExperience } from "./experience-provider";
@@ -14,6 +16,7 @@ const errorKeys: Record<AuthErrorCode, TranslationKey> = {
 };
 
 export function WelcomeScreen() {
+  const router = useRouter();
   const { locale, languages, setLocale, legacyName, register, signIn, t } = useExperience();
   const [mode, setMode] = useState<Mode>(legacyName ? "signup" : "signin");
   const [name, setName] = useState(legacyName);
@@ -37,6 +40,7 @@ export function WelcomeScreen() {
     try {
       if (mode === "signup") await register(name, email, password);
       else await signIn(email, password);
+      if (!Capacitor.isNativePlatform()) router.replace("/");
     } catch (cause) {
       setError(cause instanceof LocalAuthError ? errorKeys[cause.code] : "authUnavailable");
     } finally { setBusy(false); }
