@@ -76,3 +76,32 @@ No PFZ endpoint, polygon, coordinate, or fixture was created.
 ## Phase 2B eligibility
 
 Only the four Copernicus datasets above are technically eligible for evidence ingestion/validation. This does not approve zones, scoring, veto thresholds, or juror logic.
+
+## Ecology reference — official local India extract
+
+- Provider: Protected Planet / UNEP-WCMC and IUCN; *World Database on Protected and Conserved Areas (WDPCA)*, September 2026 public India Shapefile extract. [Official country page](https://www.protectedplanet.net/country/IND).
+- Classification: `STATIC_REFERENCE`, not a current marine observation or forecast.
+- Installed files: `data/reference/protected-planet/india-wdpca-2026-09/WDPA_WDOECM_Sep2026_Public_IND_shp_[0-2].zip`, `WDPA_sources_Sep2026.csv`, and `Shapefile_splitting_README.txt`. The three split ZIPs contain 63 polygon parcels and 27 point-only records in total; EPSG:4326 and official `SITE_ID`, `SITE_PID`, `REALM`, `NO_TAKE`, `METADATAID` and other fields are validated before use.
+- Authentication: none for local trip analysis. The earlier API v4 adapter remains an optional token-requiring fallback, but is not called when valid local files are present.
+- Coverage limitation: India withholds approximately 900 records from the public download. Point-only records lack area boundaries. Thus an absent polygon intersection cannot establish comprehensive ecological CLEAR; the New Mangalore outcome may legitimately remain `DATA_UNAVAILABLE` despite the valid local import.
+- Restriction limitation: installed records report `NO_TAKE` as `Not Applicable` or `Not Reported`, not a verified entire-site fishing prohibition. No Ecology hard veto is inferred from designation alone.
+- Licence: [Protected Planet non-commercial terms](https://www.protectedplanet.net/en/legal), with no redistribution of the underlying data without permission; published analyses need attribution, source link and release month/year. Do not commit the provider archives.
+- Method and original-file provenance: `docs/ECOLOGY_BORDER_METHOD.md`.
+
+## Maritime reference — manual official import required
+
+- Provider: Marine Regions / Flanders Marine Institute.
+- Dataset: *World EEZ v12 (2023-10-25)*, official archive `World_EEZ_v12_20231025.zip`; DOI `10.14284/632`.
+- Classification: `STATIC_REFERENCE`.
+- Licence/attribution: CC BY 4.0; cite Flanders Marine Institute (2023), Maritime Boundaries Geodatabase, version 12.
+- Authentication: no runtime credential. The official download form must be completed manually; see `docs/ECOLOGY_BORDER_METHOD.md`.
+- Runtime status on 2026-09-20: **LOADED** from `data/reference/marine-regions/World_EEZ_v12_20231025/eez_v12.shp`; 2 Indian-sovereignty EEZ polygon records selected using the official `ISO_SOV1=IND`, `SOVEREIGN1=India`, `POL_TYPE=200NM` fields. The official `.prj` validates as EPSG:4326. Source `.shp` SHA-256: `ed87e40d8f64e8ad856688e9be793b5d02a7aee773123153fc6b8f6abfb662b6`.
+- The accompanying `LICENSE_EEZ_v12.txt` says Marine Regions data is for scientific, educational, and research purposes, not legal, economic, or navigational use, and has no legal value. BLUEJURY's boundary verdict is a research decision-support reference, not a legal fishing clearance or nautical chart.
+
+## Supplementary ecology context — WII Mulki–Pavanje
+
+- Provider: Wildlife Institute of India; *Important Coastal and Marine Biodiversity Areas of India*, published in 2013 in *Coastal and Marine Protected Areas in India: Challenges and Way Forward*, ENVIS Bulletin: Wildlife & Protected Areas, Volume 15. [Official report](https://digitalrepository.wii.gov.in/bitstreams/42276ced-730e-4573-a0aa-655a52ba7096/download).
+- Verified record: Mulki–Pavanje, `13°05.835′ N, 74°47.267′ E` (`13.097250 N, 74.787783 E`), habitat “estuarine backwater and mangrove islets.” The coordinate is reported in the table on printed page 143; the site narrative is on printed page 158.
+- Semantics: `HISTORICAL_BIODIVERSITY_CONTEXT`, `POINT_CONTEXT_ONLY`, and `PROPOSED_CONSERVATION_CANDIDATE`. Notification and fishing restriction are not verified. The point is not a protected-area boundary and the reported 3.5 km² is retained only as source metadata; BLUEJURY does not buffer it or derive a polygon.
+- Runtime use: deterministic distance from the published point to the proposed destination and complete route. It is supplementary evidence only and cannot change the WDPCA outcome, Ecology score, confidence, reason codes, proximity policy, or veto.
+- Source limitation: the narrative describes the site as approximately 44 km north of Mangalore, while the published coordinate is approximately 20 km from New Mangalore Port. Both the coordinate provenance and this inconsistency are retained.

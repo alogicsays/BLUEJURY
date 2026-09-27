@@ -1,5 +1,5 @@
 {
-  "version": "mvp-2026-09-03",
+  "version": "mvp-2026-09-20-local-ecology-v3",
   "notice": "MVP decision-policy thresholds — not official navigation limits",
   "max_significant_wave_height_m": {
     "small_scale": 2.0,
@@ -7,5 +7,8 @@
   },
   "candidate_min_separation_km": 10.0,
   "candidate_radius_km": 2.5,
-  "go_confidence_floor": 0.78
+  "go_confidence_floor": 0.78,
+  "ecology_near_distance_km": 5.0,
+  "border_near_distance_km": 10.0,
+  "permitted_maritime_iso3": "IND"
 }

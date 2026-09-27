@@ -43,15 +43,19 @@ TODO: Define vessel-specific consumption functions, reserve policy, units, speed
 
 ### Ecology veto
 
-Veto when the zone or route intersects an area where the contemplated activity is confirmed prohibited under an authoritative, effective rule. Conservative buffers may be used only if documented and versioned.
+Veto when the proposed fishing destination or actual fishing-activity area intersects an area where that activity is confirmed prohibited under an authoritative, effective rule. Transit is assessed separately; conservative buffers may be used only if documented and versioned.
 
 An MPA/OECM intersection alone must not be called illegal unless the source establishes the applicable restriction. When designation geometry exists but regulation semantics are unresolved, mark legal constraint unknown and use DATA_UNAVAILABLE or cautious routing according to criticality.
+
+For the current destination-based MVP (`mvp-2026-09-20-local-ecology-v3`), the generated `DISCOVERY_FOOTPRINT` circle is only a search/display area. Ecology evaluates proposed fishing at the destination point; an explicitly supplied `FISHING_ACTIVITY_AREA` is evaluated throughout its polygon. A verified no-take restriction can veto only if it applies to that proposed fishing location/area. Route intersection is disclosed as transit caution and is not, alone, evidence of prohibited fishing. Unknown footprint role cannot be cleared. The September 2026 public India WDPCA extract has withheld and point-only records, so absence of public polygon overlap cannot yield comprehensive Ecology CLEAR; unavailable coverage is reported explicitly. The existing 5 km proximity threshold is unchanged.
 
 TODO: Acquire authoritative regulation attributes and decide zone-versus-transit rules.
 
 ### Border veto
 
-Veto when a zone or route crosses a configured unacceptable maritime boundary or buffer. Reference/disputed boundaries require explicit policy and non-legal wording.
+Veto when a proposed fishing destination, complete route, or explicitly proposed fishing-activity area exits a configured permitted maritime reference. Reference/disputed boundaries require explicit policy and non-legal wording.
+
+For the current destination-based MVP, the generated nominal 2.5 km candidate circle has the explicit role `DISCOVERY_FOOTPRINT`. It visualizes a search region, not intended fishing throughout that area. Border checks the selected destination point and **complete** route for hard exits. It separately records any part of the discovery circle outside the reference as an area and percentage; that overlap causes caution, not a hard veto, and never clears the entire circle. If a polygon is explicitly identified as `FISHING_ACTIVITY_AREA`, **all** of that proposed activity area must remain inside or Border vetoes. An absent or unknown polygon role cannot be assumed to be discovery and cannot be called CLEAR. Missing destination geometry also prevents clearance. This rule is versioned as `mvp-2026-09-20-destination-border-v2`; the 10 km near-boundary threshold is unchanged.
 
 TODO: Define home jurisdiction, permitted areas, disputed-area treatment, boundary buffer, GPS uncertainty treatment, and authority-approved rule set.
 
@@ -149,4 +153,3 @@ TODO: Set location movement, elapsed-time, evidence-revision, score-delta, and s
 ## 11. Policy governance
 
 Every DecisionBundle records policy version, juror versions, thresholds, feature/candidate/route algorithm versions, and evidence fingerprints. Policy changes require domain review, migration notes, invariant tests, and replay against golden cases. Historical decisions are not silently recomputed.
-
