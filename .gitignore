@@ -15,3 +15,6 @@ dist/
 *.log
 *.tsbuildinfo
 data/reference/protected-planet/
+
+data/cache/copernicus/
+data/reference/marine-regions/World_EEZ_v12_20231025/
